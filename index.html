@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>To My Pizzle Love</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lora:wght@400&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      font-family: 'Lora', serif;
+      color: #fff;
+      background: linear-gradient(180deg, #c0392b, #ff6b6b, #2c003e);
+      overflow-x: hidden;
+      display: none; /* Hidden until curtains open */
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: clamp(50px, 20px, 2rem);
+      position: relative;
+    }
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://i.imgur.com/2eP4Y6m.png') repeat;
+      opacity: 0.2;
+      z-index: -3;
+    }
+    .curtain {
+      position: fixed;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(to bottom, #8b0000, #c0392b);
+      z-index: 1000;
+      transition: transform 1.5s ease-out;
+    }
+    .curtain.left {
+      left: 0;
+      transform: translateX(0);
+    }
+    .curtain.right {
+      right: 0;
+      transform: translateX(0);
+    }
+    .curtain.open {
+      transform: translateX(-100%);
+    }
+    .curtain.right.open {
+      transform: translateX(100%);
+    }
+    .twinkle {
+      position: fixed;
+      width: 4px;
+      height: 4px;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0;
+      animation: twinkle 2.5s infinite;
+      z-index: -2;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0; }
+      50% { opacity: 0.9; }
+      100% { opacity: 0; }
+    }
+    .rose {
+      position: fixed;
+      width: clamp(20px, 4vw, 25px);
+      height: clamp(20px, 4vw, 25px);
+      background: url('https://i.imgur.com/8Y8f5eK.png') no-repeat center;
+      background-size: contain;
+      animation: roseFall 10s linear infinite;
+      opacity: 0.7;
+      z-index: -1;
+    }
+    @keyframes roseFall {
+      0% { transform: translateY(-100vh) translateX(0) rotate(0deg); opacity: 0.7; }
+      50% { transform: translateY(0vh) translateX(15px) rotate(180deg); }
+      100% { transform: translateY(100vh) translateX(-15px) rotate(360deg); opacity: 0; }
+    }
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2rem, 8vw, 3.5rem);
+      color: #ffcccc;
+      text-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 5px rgba(255, 255, 255, 0.6);
+      margin-bottom: clamp(1rem, 3vw, 1.5rem);
+      animation: glow 1.8s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 0 5px rgba(255, 255, 255, 0.6); }
+      to { text-shadow: 0 0 20px rgba(255, 0, 0, 1), 0 0 10px rgba(255, 255, 255, 0.9); }
+    }
+    #message {
+      font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+      max-width: clamp(300px, 80vw, 700px);
+      line-height: 1.8;
+      color: #ffe6e6;
+      opacity: 0;
+      animation: fadeIn 3.5s forwards 2s;
+      margin-bottom: clamp(1rem, 3vw, 2rem);
+      padding: clamp(0.5rem, 2vw, 1rem);
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    #love-message {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: clamp(250px, 70vw, 500px);
+      padding: clamp(1rem, 3vw, 1.5rem);
+      background: linear-gradient(45deg, #8b0000, #c0392b);
+      border: 2px solid #ffcccc;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(255, 0, 0, 0.5);
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(1rem, 4vw, 1.5rem);
+      color: #ffd700;
+      text-align: center;
+      animation: fadeInUp 0.5s ease-out, heartPulse 2s infinite;
+      z-index: 999;
+    }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translate(-50%, -40%); }
+      100% { opacity: 1; transform: translate(-50%, -50%); }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translate(-50%, -60%); }
+    }
+    @keyframes heartPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.05); }
+    }
+    #surprise-btn, #fullscreen-btn, #audio-toggle, #save-reply {
+      padding: clamp(0.6rem, 2vw, 0.9rem) clamp(1.5rem, 4vw, 2.5rem);
+      font-size: clamp(0.9rem, 3vw, 1.1rem);
+      font-family: 'Dancing Script', cursive;
+      background: linear-gradient(45deg, #ff0000, #ff6b6b);
+      border: none;
+      color: #fff;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 12px rgba(255, 0, 0, 0.6);
+      margin: clamp(0.3rem, 1vw, 0.5rem) 0;
+    }
+    #surprise-btn:hover, #fullscreen-btn:hover, #audio-toggle:hover, #save-reply:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 18px rgba(255, 0, 0, 0.8);
+    }
+    #fullscreen-btn {
+      position: fixed;
+      top: clamp(0.5rem, 2vw, 1rem);
+      right: clamp(0.5rem, 2vw, 1rem);
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      padding: clamp(0.4rem, 1.5vw, 0.6rem) clamp(0.8rem, 2vw, 1rem);
+    }
+    #surprise {
+      display: none;
+      margin-top: clamp(1rem, 3vw, 2rem);
+      max-width: clamp(300px, 80vw, 700px);
+      font-size: clamp(0.9rem, 3vw, 1.1rem);
+      background: rgba(0, 0, 0, 0.5);
+      padding: clamp(1rem, 3vw, 2rem);
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      animation: heartPop 0.8s ease-out;
+      border: 1px solid rgba(255, 0, 0, 0.5);
+    }
+    @keyframes heartPop {
+      0% { transform: scale(0); opacity: 0; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+      50% { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+      100% { transform: scale(1); opacity: 1; clip-path: none; }
+    }
+    #surprise a {
+      color: #ffcccc;
+      text-decoration: underline;
+      transition: color 0.3s;
+    }
+    #surprise a:hover {
+      color: #ff0000;
+    }
+    #lock {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: clamp(80px, 15vw, 120px);
+      height: clamp(80px, 15vw, 120px);
+      background: url('https://i.imgur.com/8Y8f5eK.png') no-repeat center;
+      background-size: contain;
+      animation: lockWiggle 0.5s infinite alternate;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    @keyframes lockWiggle {
+      from { transform: translate(-50%, -50%) rotate(-5deg); }
+      to { transform: translate(-50%, -50%) rotate(5deg); }
+    }
+    #rose-bloom {
+      display: none;
+      width: clamp(100px, 20vw, 150px);
+      height: clamp(100px, 20vw, 150px);
+      margin: 0 auto clamp(1rem, 3vw, 1.5rem);
+      animation: bloom 2s ease-out forwards;
+    }
+    @keyframes bloom {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    #slideshow {
+      margin-top: clamp(1rem, 3vw, 1.5rem);
+      display: none;
+      position: relative;
+      width: 100%;
+      max-width: clamp(250px, 70vw, 500px);
+      height: clamp(150px, 50vw, 300px);
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .slide.active {
+      opacity: 1;
+    }
+    .caption {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: #ffcccc;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      padding: clamp(0.3rem, 1vw, 0.5rem);
+      text-align: center;
+    }
+    #timeline {
+      display: none;
+      margin-top: clamp(1rem, 3vw, 1.5rem);
+      max-width: clamp(250px, 80vw, 700px);
+      background: rgba(0, 0, 0, 0.5);
+      padding: clamp(1rem, 3vw, 1.5rem);
+      border-radius: 12px;
+      font-size: clamp(0.8rem, 3vw, 1rem);
+    }
+    .timeline-item {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideIn 0.6s forwards;
+      margin-bottom: clamp(0.5rem, 2vw, 1rem);
+    }
+    .timeline-item:nth-child(1) { animation-delay: 0.3s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.6s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.9s; }
+    @keyframes slideIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #reply-box {
+      margin-top: clamp(1rem, 3vw, 1.5rem);
+      display: none;
+    }
+    #reply {
+      padding: clamp(0.5rem, 2vw, 0.7rem);
+      font-size: clamp(0.8rem, 3vw, 1rem);
+      width: 100%;
+      max-width: clamp(250px, 70vw, 500px);
+      border-radius: 8px;
+      border: 1px solid #ffcccc;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-family: 'Lora', serif;
+      resize: vertical;
+    }
+    .secret {
+      position: fixed;
+      bottom: clamp(0.5rem, 2vw, 1rem);
+      left: clamp(0.5rem, 2vw, 1rem);
+      font-size: clamp(0.7rem, 2vw, 0.8rem);
+      color: transparent;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+    .secret:hover, .secret:active {
+      color: #ffcccc;
+    }
+    @media (max-width: 400px) {
+      body {
+        padding: clamp(0.5rem, 3vw, 1rem);
+      }
+      h1 {
+        font-size: clamp(1.5rem, 6vw, 2.5rem);
+      }
+      #message {
+        font-size: clamp(0.8rem, 3vw, 1rem);
+      }
+      #surprise {
+        padding: clamp(0.8rem, 2vw, 1.2rem);
+      }
+      #slideshow {
+        height: clamp(120px, 40vw, 200px);
+      }
+      #love-message {
+        font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+        padding: clamp(0.8rem, 2vw, 1rem);
+      }
+    }
+    @media (max-width: 600px) {
+      h1 {
+        font-size: clamp(1.8rem, 7vw, 3rem);
+      }
+      #surprise-btn, #audio-toggle, #save-reply {
+        padding: clamp(0.5rem, 2vw, 0.8rem) clamp(1rem, 3vw, 2rem);
+      }
+      #timeline {
+        padding: clamp(0.8rem, 2vw, 1.2rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="curtain left"></div>
+  <div class="curtain right"></div>
+  <div class="background"></div>
+  <div id="twinkles"></div>
+  <div id="roses"></div>
+  <button id="fullscreen-btn">Fullscreen</button>
+  <h1>To My Pizzle Love</h1>
+  <p id="message"></p>
+  <button id="surprise-btn">Unlock My Love, Pizzle 💖</button>
+  <div id="love-message"></div>
+  <div id="lock"></div>
+  <div id="surprise">
+    <svg id="rose-bloom" viewBox="0 0 100 100" fill="#ff0000">
+      <path d="M50 30 C30 20, 20 40, 30 50 C20 60, 30 80, 50 70 C70 80, 80 60, 70 50 C80 40, 70 20, 50 30" />
+    </svg>
+    <p>Pizzle Love, you set my heart ablaze. Every moment with you is my forever. Play <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">our song</a> and feel my love. 😘</p>
+    <div id="slideshow">
+      <img class="slide" src="https://i.imgur.com/8Y8f5eK.png" alt="Placeholder Heart">
+      <div class="caption">Our Love in Bloom</div>
+      <img class="slide" src="https://i.imgur.com/9Z7Xz7u.png" alt="Placeholder Rose">
+      <div class="caption">Forever Yours</div>
+    </div>
+    <div id="timeline">
+      <p class="timeline-item">First Date: [June 20, 2024]</p>
+      <p class="timeline-item">First Kiss: [Under the Stars]</p>
+      <p class="timeline-item">Forever: [Always with You]</p>
+    </div>
+    <div id="reply-box">
+      <textarea id="reply" placeholder="Write me something sweet, Pizzle Love..."></textarea>
+      <button id="audio-toggle">Play Music</button>
+      <button id="save-reply">Save Your Reply</button>
+    </div>
+  </div>
+  <span class="secret">I love you forever</span>
+  <audio id="bg-music" src="https://www.fesliyanstudios.com/play-mp3/2392" preload="auto"></audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const messageEl = document.getElementById('message');
+      const surpriseBtn = document.getElementById('surprise-btn');
+      const fullscreenBtn = document.getElementById('fullscreen-btn');
+      const loveMessageEl = document.getElementById('love-message');
+      const surpriseEl = document.getElementById('surprise');
+      const lockEl = document.getElementById('lock');
+      const replyBox = document.getElementById('reply-box');
+      const replyEl = document.getElementById('reply');
+      const saveReplyBtn = document.getElementById('save-reply');
+      const audioToggle = document.getElementById('audio-toggle');
+      const bgMusic = document.getElementById('bg-music');
+      const rosesContainer = document.getElementById('roses');
+      const twinklesContainer = document.getElementById('twinkles');
+      const slideshow = document.getElementById('slideshow');
+      const timeline = document.getElementById('timeline');
+      const slides = document.querySelectorAll('.slide');
+      const curtains = document.querySelectorAll('.curtain');
+
+      // Love messages array
+      const loveMessages = [
+        "Pizzle Love, you’re my forever flame.",
+        "You light up my world like a red sunset.",
+        "My heart beats only for you, Pizzle.",
+        "You’re the rose that blooms in my soul.",
+        "I love you more than words can say."
+      ];
+      let messageIndex = 0;
+
+      // Open curtains and show body
+      setTimeout(() => {
+        curtains.forEach(c => c.classList.add('open'));
+        document.body.style.display = 'flex';
+      }, 500);
+
+      // Type out the main message
+      const message = "Pizzle Love, you’re the fire in my soul. Every heartbeat sings your name. I love you more than all the roses in the world.";
+      let i = 0;
+      function typeMessage() {
+        if (i < message.length) {
+          messageEl.textContent += message[i];
+          i++;
+          setTimeout(typeMessage, 50);
+        }
+      }
+      setTimeout(typeMessage, 2000);
+
+      // Create twinkling stars
+      function createTwinkle() {
+        const twinkle = document.createElement('div');
+        twinkle.className = 'twinkle';
+        twinkle.style.left = Math.random() * 100 + 'vw';
+        twinkle.style.top = Math.random() * 100 + 'vh';
+        twinkle.style.animationDuration = Math.random() * 1.5 + 1.5 + 's';
+        twinklesContainer.appendChild(twinkle);
+        setTimeout(() => twinkle.remove(), 3000);
+      }
+      setInterval(createTwinkle, 200);
+
+      // Create falling roses
+      function createRose() {
+        const rose = document.createElement('div');
+        rose.className = 'rose';
+        rose.style.left = Math.random() * 100 + 'vw';
+        rose.style.animationDuration = Math.random() * 5 + 5 + 's';
+        rose.style.transform = `rotate(${Math.random() * 360}deg)`;
+        rosesContainer.appendChild(rose);
+        setTimeout(() => rose.remove(), 10000);
+      }
+      setInterval(createRose, 300);
+
+      // Toggle love messages
+      surpriseBtn.onclick = () => {
+        if (messageIndex < loveMessages.length) {
+          loveMessageEl.textContent = loveMessages[messageIndex];
+          loveMessageEl.style.display = 'block';
+          loveMessageEl.style.animation = 'fadeInUp 0.5s ease-out, heartPulse 2s infinite';
+          setTimeout(() => {
+            loveMessageEl.style.animation = 'fadeOut 0.5s ease-out';
+            setTimeout(() => {
+              loveMessageEl.style.display = 'none';
+              messageIndex++;
+              if (messageIndex === loveMessages.length) {
+                lockEl.style.display = 'block';
+                surpriseBtn.style.display = 'none';
+              }
+            }, 500);
+          }, 2000);
+        }
+      };
+
+      // Fullscreen handling
+      fullscreenBtn.onclick = async () => {
+        const requestFullscreen = (
+          document.documentElement.requestFullscreen ||
+          document.documentElement.webkitRequestFullscreen ||
+          document.documentElement.mozRequestFullScreen ||
+          document.documentElement.msRequestFullscreen
+        );
+        if (requestFullscreen) {
+          try {
+            await requestFullscreen.call(document.documentElement);
+          } catch (e) {
+            console.warn("Fullscreen failed:", e);
+            document.body.style.width = '100vw';
+            document.body.style.height = '100vh';
+            document.body.style.overflow = 'auto';
+          }
+        }
+      };
+
+      // Unlock surprise
+      lockEl.onclick = () => {
+        lockEl.style.display = 'none';
+        surpriseEl.style.display = 'block';
+        replyBox.style.display = 'block';
+        slideshow.style.display = 'block';
+        timeline.style.display = 'block';
+        document.getElementById('rose-bloom').style.display = 'block';
+        confetti({
+          particleCount: 120,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#ff0000', '#ffcccc', '#ffffff']
+        });
+        // Start slideshow
+        let currentSlide = 0;
+        slides[currentSlide].classList.add('active');
+        setInterval(() => {
+          slides[currentSlide].classList.remove('active');
+          currentSlide = (currentSlide + 1) % slides.length;
+          slides[currentSlide].classList.add('active');
+        }, 3000);
+      };
+
+      // Audio toggle
+      let isPlaying = false;
+      audioToggle.onclick = () => {
+        if (isPlaying) {
+          bgMusic.pause();
+          audioToggle.textContent = 'Play Music';
+        } else {
+          bgMusic.play();
+          audioToggle.textContent = 'Pause Music';
+        }
+        isPlaying = !isPlaying;
+      };
+
+      // Save reply
+      saveReplyBtn.onclick = () => {
+        const reply = replyEl.value;
+        if (reply) {
+          localStorage.setItem('loveReply', reply);
+          alert('Your sweet words are saved, Pizzle Love! 💖🔥 I’ll hold them close forever!');
+        } else {
+          alert('Write something sweet first, my love! 😘');
+        }
+      };
+
+      // Load saved reply
+      const savedReply = localStorage.getItem('loveReply');
+      if (savedReply) {
+        replyEl.value = savedReply;
+      }
+    });
+  </script>
+</body>
+</html>
